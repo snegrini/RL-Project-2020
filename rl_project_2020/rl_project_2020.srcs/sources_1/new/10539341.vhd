@@ -43,8 +43,7 @@ architecture Behavioral of project_reti_logiche is
     
     signal o_en_next, o_we_next, o_done_next : std_logic := '0';
     signal o_data_next : std_logic_vector(7 downto 0) := "00000000";
-    signal o_address_next : std_logic_vector(15 downto 0) := "0000000000000000";
-    signal mem_address, mem_address_next : std_logic_vector(15 downto 0) := "0000000000000000";
+    signal o_address_next, o_address_reg : std_logic_vector(15 downto 0) := "0000000000000000";
     
     signal target_address, target_address_next : std_logic_vector(7 downto 0)  := "00000000";
     signal wz_bit, wz_bit_next : std_logic := '0';
@@ -73,11 +72,10 @@ begin
             o_en <= o_en_next;
             o_we <= o_we_next;
             o_address <= o_address_next;
+            o_address_reg <= o_address_next;
             o_data <= o_data_next;            
             
-            mem_address <= mem_address_next;
-            is_target_address_set <= is_target_address_set_next;
-            
+            is_target_address_set <= is_target_address_set_next;       
             target_address <= target_address_next;
             wz_bit <= wz_bit_next;
             wz_offset <= wz_offset_next;            
@@ -85,7 +83,7 @@ begin
     end process;
 
     comb_proc: process (pres_state, i_start, i_data, target_address, wz_bit, 
-                        wz_offset, mem_address, is_target_address_set)
+                        wz_offset, o_address_reg, is_target_address_set)
     begin    
         o_done_next <= '0';
         o_en_next <= '0';
@@ -95,7 +93,6 @@ begin
                 
         target_address_next <= target_address;
         
-        mem_address_next <= mem_address;
         wz_bit_next <= wz_bit;
         wz_offset_next <= wz_offset;
         
@@ -112,20 +109,15 @@ begin
         when FETCH_ADDR =>
             o_en_next <= '1';
             o_we_next <= '0';
-            
-            if (not is_target_address_set) then
-                o_address_next <= std_logic_vector(to_unsigned(8, 16));
-                next_state <= WAIT_RAM;
-            else
-                o_address_next <= mem_address;
-                next_state <= GET_ADDR;
-            end if;
-            
-            --next_state <= WAIT_RAM;
-            
+                       
+            o_address_next <= std_logic_vector(to_unsigned(8, 16));
+            next_state <= WAIT_RAM;
+                        
         when WAIT_RAM =>
             o_en_next <= '1';
             o_we_next <= '0';
+            
+            o_address_next <= o_address_reg;
             next_state <= GET_ADDR;
         
         when GET_ADDR =>
@@ -141,20 +133,16 @@ begin
             -- per verificare l'appartenenza del target_address alla WZ.
             if (not is_target_address_set) then
                 target_address_next <= i_data;
-                is_target_address_set_next <= true;
-                mem_address_next <= mem_address;
+                is_target_address_set_next <= true;               
+                o_address_next <= std_logic_vector(to_unsigned(0, 16));
                 
-                o_address_next <= mem_address;
-                
-                next_state <= FETCH_ADDR;
+                next_state <= WAIT_RAM;
             else
                 -- ## CHECK_WZ ## --
-                if (unsigned(mem_address) < 7) then
-                    mem_address_next <= std_logic_vector(unsigned(mem_address) + 1);
+                if (unsigned(o_address_reg) < 7) then                   
+                    o_address_next <= std_logic_vector(unsigned(o_address_reg) + 1);
                     
-                    o_address_next <= std_logic_vector(unsigned(mem_address) + 1);
-                    
-                    next_state <= FETCH_ADDR;
+                    next_state <= WAIT_RAM;
                 else
                     next_state <= WRITE_BACK;
                 end if;
@@ -164,7 +152,7 @@ begin
                     if (unsigned(target_address) - unsigned(i_data) < 4) then
                         -- L'indirizzo appartiene alla WZ.
                         wz_bit_next <= '1';
-                        mem_address_next <= mem_address;
+                        o_address_next <= o_address_reg;
                         wz_offset_next <= std_logic_vector( shift_left( unsigned(wz_offset), to_integer( unsigned(target_address) - unsigned(i_data)) ) );
                         
                         next_state <= WRITE_BACK;
@@ -181,7 +169,7 @@ begin
             o_done_next <= '1';
             
             if (wz_bit = '1') then
-                o_data_next <= wz_bit & mem_address(2 downto 0) & wz_offset;
+                o_data_next <= wz_bit & o_address_reg(2 downto 0) & wz_offset;
             else
                 o_data_next <= wz_bit & target_address(6 downto 0);
             end if;
@@ -191,7 +179,6 @@ begin
         when DONE =>
             if (i_start = '0') then
                 is_target_address_set_next <= false;
-                mem_address_next <= "0000000000000000";
                 wz_bit_next <= '0';
                 wz_offset_next <= "0001";
                 
