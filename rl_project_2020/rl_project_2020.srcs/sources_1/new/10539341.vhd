@@ -115,13 +115,17 @@ begin
             
             if (not is_target_address_set) then
                 o_address_next <= std_logic_vector(to_unsigned(8, 16));
+                next_state <= WAIT_RAM;
             else
                 o_address_next <= mem_address;
+                next_state <= GET_ADDR;
             end if;
             
-            next_state <= WAIT_RAM;
+            --next_state <= WAIT_RAM;
             
         when WAIT_RAM =>
+            o_en_next <= '1';
+            o_we_next <= '0';
             next_state <= GET_ADDR;
         
         when GET_ADDR =>
@@ -140,11 +144,16 @@ begin
                 is_target_address_set_next <= true;
                 mem_address_next <= mem_address;
                 
+                o_address_next <= mem_address;
+                
                 next_state <= FETCH_ADDR;
             else
                 -- ## CHECK_WZ ## --
                 if (unsigned(mem_address) < 7) then
                     mem_address_next <= std_logic_vector(unsigned(mem_address) + 1);
+                    
+                    o_address_next <= std_logic_vector(unsigned(mem_address) + 1);
+                    
                     next_state <= FETCH_ADDR;
                 else
                     next_state <= WRITE_BACK;
