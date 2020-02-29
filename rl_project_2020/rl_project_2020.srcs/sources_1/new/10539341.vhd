@@ -38,7 +38,7 @@ entity                project_reti_logiche                        is
 end                                             project_reti_logiche;
 
 architecture Behavioral of project_reti_logiche is
-    type state_type is (IDLE, FETCH_ADDR, WAIT_RAM, GET_ADDR, CHECK_WZ, ENC_ADDR, WRITE_BACK, DONE);
+    type state_type is (IDLE, FETCH_ADDR, WAIT_RAM, GET_ADDR, ENC_ADDR, WRITE_BACK, DONE);
     signal pres_state, next_state : state_type;
     
     signal o_en_next, o_we_next, o_done_next : std_logic := '0';
@@ -47,10 +47,11 @@ architecture Behavioral of project_reti_logiche is
     signal mem_address, mem_address_next : std_logic_vector(15 downto 0) := "0000000000000000";
     
     signal target_address, target_address_next : std_logic_vector(7 downto 0)  := "00000000";
-    signal wz_address, wz_address_next         : std_logic_vector(7 downto 0)  := "00000000";
     signal wz_bit, wz_bit_next : std_logic := '0';
     signal wz_num, wz_num_next        : std_logic_vector(2 downto 0) := "000";
     signal wz_offset, wz_offset_next  : std_logic_vector(3 downto 0) := "0001";
+    
+    signal shift_num, shift_num_next : integer range 0 to 3 := 0;
     
     signal is_target_address_set, is_target_address_set_next : boolean := false;
     
@@ -84,16 +85,16 @@ begin
             is_target_address_set <= is_target_address_set_next;
             
             target_address <= target_address_next;
-            wz_address <= wz_address_next;
             wz_bit <= wz_bit_next;
             wz_num <= wz_num_next;
             wz_offset <= wz_offset_next;
+            shift_num <= shift_num_next;
             
         end if;
     end process;
 
-    comb_proc: process (pres_state, i_start, i_data, target_address, wz_address, wz_bit, 
-                        wz_num, wz_offset, mem_address, is_target_address_set)
+    comb_proc: process (pres_state, i_start, i_data, target_address, wz_bit, 
+                        wz_num, wz_offset, shift_num, mem_address, is_target_address_set)
     begin    
         o_done_next <= '0';
         o_en_next <= '0';
@@ -102,12 +103,12 @@ begin
         o_address_next <= "0000000000000000";
                 
         target_address_next <= target_address;
-        wz_address_next <= wz_address;
         
         mem_address_next <= mem_address;
         wz_bit_next <= wz_bit;
         wz_num_next <= wz_num;
         wz_offset_next <= wz_offset;
+        shift_num_next <= shift_num;
         
         is_target_address_set_next <= is_target_address_set;
         next_state <= pres_state;
@@ -152,35 +153,32 @@ begin
                 
                 next_state <= FETCH_ADDR;
             else
-                wz_address_next <= i_data;
-                
-                next_state <= CHECK_WZ;
-            end if;
-            
-        when CHECK_WZ =>
-                
-            if (unsigned(mem_address) < 7) then
-                mem_address_next <= std_logic_vector(unsigned(mem_address) + 1);
-                next_state <= FETCH_ADDR;
-            else
-                next_state <= WRITE_BACK;
-            end if;
-            
-            if (unsigned(target_address) >= unsigned(wz_address)) then
-                
-                if (unsigned(target_address) - unsigned(wz_address) < 4) then
-                    -- L'indirizzo appartiene alla WZ.
-                    wz_bit_next <= '1';
-                    mem_address_next <= mem_address;
-                    wz_address_next <= std_logic_vector( unsigned(target_address) - unsigned(wz_address));
-                    next_state <= ENC_ADDR;
+                -- ## CHECK_WZ ## --
+                if (unsigned(mem_address) < 7) then
+                    mem_address_next <= std_logic_vector(unsigned(mem_address) + 1);
+                    next_state <= FETCH_ADDR;
+                else
+                    next_state <= WRITE_BACK;
                 end if;
                 
+                if (unsigned(target_address) >= unsigned(i_data)) then
+                    
+                    if (unsigned(target_address) - unsigned(i_data) < 4) then
+                        -- L'indirizzo appartiene alla WZ.
+                        wz_bit_next <= '1';
+                        mem_address_next <= mem_address;
+                        shift_num_next <= to_integer( unsigned(target_address) - unsigned(i_data));
+                        next_state <= ENC_ADDR;
+                    end if;
+                    
+                end if;
+                -- ## END CHECK_WZ ## --
             end if;
+          
         
         when ENC_ADDR =>
             wz_num_next <= mem_address(2 downto 0);
-            wz_offset_next <= std_logic_vector( shift_left( unsigned(wz_offset), to_integer( unsigned(wz_address) ) ) );
+            wz_offset_next <= std_logic_vector( shift_left( unsigned(wz_offset), shift_num ) );
             next_state <= WRITE_BACK;
             
         when WRITE_BACK =>
