@@ -137,27 +137,23 @@ begin
                 o_address_next <= std_logic_vector(to_unsigned(0, 16));
                 
                 next_state <= WAIT_RAM;
-            else
+            else                             
                 -- ## CHECK_WZ ## --
-                if (unsigned(o_address_reg) < 7) then                   
-                    o_address_next <= std_logic_vector(unsigned(o_address_reg) + 1);
-                    
-                    next_state <= WAIT_RAM;
-                else
+                if (unsigned(i_data) <= unsigned(target_address) and unsigned(target_address) - unsigned(i_data) < 4) then
+                    -- L'indirizzo appartiene alla WZ corrente. Procedo nella codifica e salvataggio dell'indirizzo su RAM.
+                    wz_bit_next <= '1';
+                    wz_offset_next <= std_logic_vector( shift_left( unsigned(wz_offset), to_integer( unsigned(target_address) - unsigned(i_data)) ) );
+
                     next_state <= WRITE_BACK;
-                end if;
-                
-                if (unsigned(target_address) >= unsigned(i_data)) then
-                    
-                    if (unsigned(target_address) - unsigned(i_data) < 4) then
-                        -- L'indirizzo appartiene alla WZ.
-                        wz_bit_next <= '1';
-                        o_address_next <= o_address_reg;
-                        wz_offset_next <= std_logic_vector( shift_left( unsigned(wz_offset), to_integer( unsigned(target_address) - unsigned(i_data)) ) );
+                else
+                    -- L'indirizzo non appartiene alla WZ corrente.
+                    if (unsigned(o_address_reg) < 7) then                   
+                        o_address_next <= std_logic_vector(unsigned(o_address_reg) + 1);
                         
+                        next_state <= WAIT_RAM;
+                    else
                         next_state <= WRITE_BACK;
-                    end if;
-                    
+                    end if;                
                 end if;
                 -- ## END CHECK_WZ ## --
             end if;
@@ -166,8 +162,7 @@ begin
             o_en_next <= '1';
             o_we_next <= '1';
             o_address_next <= std_logic_vector(to_unsigned(9, 16));
-            o_done_next <= '1';
-            
+                       
             if (wz_bit = '1') then
                 o_data_next <= wz_bit & o_address_reg(2 downto 0) & wz_offset;
             else
@@ -176,13 +171,15 @@ begin
 
             next_state <= DONE;
     
-        when DONE =>
+        when DONE =>           
             if (i_start = '0') then
                 is_target_address_set_next <= false;
                 wz_bit_next <= '0';
                 wz_offset_next <= "0001";
                 
                 next_state <= IDLE;
+            else
+                o_done_next <= '1';
             end if;
         end case;
     end process;

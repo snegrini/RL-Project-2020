@@ -37,6 +37,9 @@ read_vhdl -library xil_defaultlib /home/snegrini/Documents/RL-Project-2020-new/r
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
+read_xdc /home/snegrini/Documents/RL-Project-2020-new/rl_project_2020/rl_project_2020.srcs/constrs_1/new/constr_clock.xdc
+set_property used_in_implementation false [get_files /home/snegrini/Documents/RL-Project-2020-new/rl_project_2020/rl_project_2020.srcs/constrs_1/new/constr_clock.xdc]
+
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 
