@@ -141,8 +141,9 @@ begin
                 -- ## CHECK_WZ ## --
                 if (unsigned(i_data) <= unsigned(target_address) and unsigned(target_address) - unsigned(i_data) < 4) then
                     -- L'indirizzo appartiene alla WZ corrente. Procedo nella codifica e salvataggio dell'indirizzo su RAM.
-                    wz_bit_next <= '1';
+                    wz_bit_next <= '1';                    
                     wz_offset_next <= std_logic_vector( shift_left( unsigned(wz_offset), to_integer( unsigned(target_address) - unsigned(i_data)) ) );
+                    o_address_next <= o_address_reg;
 
                     next_state <= WRITE_BACK;
                 else
@@ -152,6 +153,8 @@ begin
                         
                         next_state <= WAIT_RAM;
                     else
+                        o_address_next <= o_address_reg;
+
                         next_state <= WRITE_BACK;
                     end if;                
                 end if;
