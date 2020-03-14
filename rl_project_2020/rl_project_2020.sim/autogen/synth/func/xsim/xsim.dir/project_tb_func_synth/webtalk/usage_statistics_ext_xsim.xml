@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<webTalkData  fileName='usage_statistics_ext_xsim.xml'  majorVersion='1' minorVersion='0' timeStamp='Mon Mar  2 18:15:37 2020'>
+<webTalkData  fileName='usage_statistics_ext_xsim.xml'  majorVersion='1' minorVersion='0' timeStamp='Sat Mar 14 11:24:08 2020'>
 <section name="__ROOT__" level="0" order="1" description="">
  <section name="software_version_and_target_device" level="1" order="1" description="">
   <keyValuePair key="beta" value="FALSE" description="" />
   <keyValuePair key="build_version" value="2708876" description="" />
-  <keyValuePair key="date_generated" value="Mon Mar  2 18:15:34 2020" description="" />
+  <keyValuePair key="date_generated" value="Sat Mar 14 11:24:05 2020" description="" />
   <keyValuePair key="os_platform" value="LIN64" description="" />
   <keyValuePair key="product_version" value="XSIM v2019.2 (64-bit)" description="" />
   <keyValuePair key="project_id" value="e7bf0e48b1c44d05ab4d981a95f56097" description="" />
-  <keyValuePair key="project_iteration" value="4" description="" />
+  <keyValuePair key="project_iteration" value="6" description="" />
   <keyValuePair key="random_id" value="ea9750d0-5e9a-429d-8b39-c7f5ef69b64f" description="" />
   <keyValuePair key="registration_id" value="ea9750d0-5e9a-429d-8b39-c7f5ef69b64f" description="" />
   <keyValuePair key="route_design" value="FALSE" description="" />
@@ -34,9 +34,9 @@
   </section>
   <section name="usage" level="2" order="2" description="">
    <keyValuePair key="iteration" value="0" description="" />
-   <keyValuePair key="runtime" value="797533850100 ps" description="" />
+   <keyValuePair key="runtime" value="849050100 ps" description="" />
    <keyValuePair key="simulation_memory" value="138944_KB" description="" />
-   <keyValuePair key="simulation_time" value="743.90_sec" description="" />
+   <keyValuePair key="simulation_time" value="0.76_sec" description="" />
    <keyValuePair key="trace_waveform" value="true" description="" />
   </section>
  </section>

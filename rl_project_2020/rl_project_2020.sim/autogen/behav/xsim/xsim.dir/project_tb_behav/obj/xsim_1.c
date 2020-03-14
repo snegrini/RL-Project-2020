@@ -47,14 +47,14 @@
 #define alloca _alloca
 #endif
 typedef void (*funcp)(char *, char *);
-extern void execute_48(char*, char *);
 extern void execute_49(char*, char *);
 extern void execute_50(char*, char *);
-extern void execute_46(char*, char *);
+extern void execute_51(char*, char *);
 extern void execute_47(char*, char *);
+extern void execute_48(char*, char *);
 extern void vhdl_transfunc_eventcallback(char*, char*, unsigned, unsigned, unsigned, char *);
 extern void transaction_4(char*, char*, unsigned, unsigned, unsigned);
-funcp funcTab[7] = {(funcp)execute_48, (funcp)execute_49, (funcp)execute_50, (funcp)execute_46, (funcp)execute_47, (funcp)vhdl_transfunc_eventcallback, (funcp)transaction_4};
+funcp funcTab[7] = {(funcp)execute_49, (funcp)execute_50, (funcp)execute_51, (funcp)execute_47, (funcp)execute_48, (funcp)vhdl_transfunc_eventcallback, (funcp)transaction_4};
 const int NumRelocateId= 7;
 
 void relocate(char *dp)
@@ -63,8 +63,8 @@ void relocate(char *dp)
 	iki_vhdl_file_variable_register(dp + 1056640);
 	iki_vhdl_file_variable_register(dp + 1056696);
 	iki_vhdl_file_variable_register(dp + 1059120);
-	iki_vhdl_file_variable_register(dp + 1583624);
-	iki_vhdl_file_variable_register(dp + 1583712);
+	iki_vhdl_file_variable_register(dp + 1583640);
+	iki_vhdl_file_variable_register(dp + 1583744);
 
 
 	/*Populate the transaction function pointer field in the whole net structure */
