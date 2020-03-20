@@ -1056,8 +1056,8 @@ void relocate(char *dp)
 	iki_vhdl_file_variable_register(dp + 1599448);
 	iki_vhdl_file_variable_register(dp + 1599504);
 	iki_vhdl_file_variable_register(dp + 1605640);
-	iki_vhdl_file_variable_register(dp + 2130160);
-	iki_vhdl_file_variable_register(dp + 2130264);
+	iki_vhdl_file_variable_register(dp + 2130144);
+	iki_vhdl_file_variable_register(dp + 2130232);
 
 
 	/*Populate the transaction function pointer field in the whole net structure */
@@ -1074,13 +1074,13 @@ void wrapper_func_0(char *dp)
 
 {
 
-	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605216, dp + 2655776, 0, 0, 0, 0, 1, 1);
+	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605216, dp + 2655728, 0, 0, 0, 0, 1, 1);
 
-	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605160, dp + 2656168, 0, 0, 0, 0, 1, 1);
+	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605160, dp + 2656120, 0, 0, 0, 0, 1, 1);
 
-	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605104, dp + 2656056, 0, 0, 0, 0, 1, 1);
+	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605104, dp + 2656008, 0, 0, 0, 0, 1, 1);
 
-	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605272, dp + 2655944, 0, 7, 0, 7, 8, 1);
+	iki_vlog_schedule_transaction_signal_fast_vhdl_value_time_0(dp + 1605272, dp + 2655896, 0, 7, 0, 7, 8, 1);
 
 }
 

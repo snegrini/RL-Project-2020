@@ -20,15 +20,15 @@ signal   mem_we		        : std_logic;
 type ram_type is array (65535 downto 0) of std_logic_vector(7 downto 0);
 
 -- come da esempio su specifica
-signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 4 , 8)),
-                         1 => std_logic_vector(to_unsigned( 13 , 8)),
-                         2 => std_logic_vector(to_unsigned( 0 , 8)),
-                         3 => std_logic_vector(to_unsigned( 31 , 8)),
-                         4 => std_logic_vector(to_unsigned( 37 , 8)),
-                         5 => std_logic_vector(to_unsigned( 45 , 8)),
-                         6 => std_logic_vector(to_unsigned( 77 , 8)),
-                         7 => std_logic_vector(to_unsigned( 124 , 8)),
-                         8 => std_logic_vector(to_unsigned( 0 , 8)),
+signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 95 , 8)),
+                         1 => std_logic_vector(to_unsigned( 85 , 8)),
+                         2 => std_logic_vector(to_unsigned( 35 , 8)),
+                         3 => std_logic_vector(to_unsigned( 69 , 8)),
+                         4 => std_logic_vector(to_unsigned( 124 , 8)),
+                         5 => std_logic_vector(to_unsigned( 18 , 8)),
+                         6 => std_logic_vector(to_unsigned( 103 , 8)),
+                         7 => std_logic_vector(to_unsigned( 0 , 8)),
+                         8 => std_logic_vector(to_unsigned( 3 , 8)),
 			 others => (others =>'0'));
 
 component project_reti_logiche is
@@ -96,23 +96,23 @@ begin
     tb_start <= '0';
     wait until tb_done = '0';
 
-    -- Maschera di output = 1 - 010 - 0100
-    assert RAM(9) = std_logic_vector(to_unsigned( 161, 8)) report "TEST FALLITO. Expected  161  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
+    -- Maschera di output = 1 - 111 - 1000
+    assert RAM(9) = std_logic_vector(to_unsigned( 248, 8)) report "TEST FALLITO. Expected  248  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
 			
-	--wait for 90 ns;
-    wait for c_CLOCK_PERIOD;
-    tb_rst <= '1';
-    wait for c_CLOCK_PERIOD;
-    tb_rst <= '0';
-    wait for c_CLOCK_PERIOD;
-    tb_start <= '1';
-    wait until tb_done = '1';
-    wait for c_CLOCK_PERIOD;
-    tb_start <= '0';
-    wait until tb_done = '0';	
+--	--wait for 90 ns;
+--    wait for c_CLOCK_PERIOD;
+--    tb_rst <= '1';
+--    wait for c_CLOCK_PERIOD;
+--    tb_rst <= '0';
+--    wait for c_CLOCK_PERIOD;
+--    tb_start <= '1';
+--    wait until tb_done = '1';
+--    wait for c_CLOCK_PERIOD;
+--    tb_start <= '0';
+--    wait until tb_done = '0';	
 
-    -- Maschera di output = 1 - 010 - 0100
-    assert RAM(9) = std_logic_vector(to_unsigned( 161, 8)) report "TEST FALLITO. Expected  161  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
+--    -- Maschera di output = 1 - 010 - 0100
+--    assert RAM(9) = std_logic_vector(to_unsigned( 161, 8)) report "TEST FALLITO. Expected  161  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
  
     assert false report "Simulation Ended!, TEST PASSATO" severity failure;
 end process test;

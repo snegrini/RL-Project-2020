@@ -1,7 +1,7 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-// Date        : Fri Mar 13 18:15:05 2020
+// Date        : Sun Mar 15 19:15:55 2020
 // Host        : dumevm running 64-bit Ubuntu 16.04.6 LTS
 // Command     : write_verilog -mode timesim -nolib -sdf_anno true -force -file
 //               /home/snegrini/Documents/RL-Project-2020-new/rl_project_2020/rl_project_2020.sim/sim_2/synth/timing/xsim/all_multi_tb_time_synth.v

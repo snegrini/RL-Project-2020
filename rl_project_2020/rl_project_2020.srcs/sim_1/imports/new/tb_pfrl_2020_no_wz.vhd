@@ -20,14 +20,14 @@ signal   mem_we		        : std_logic;
 type ram_type is array (65535 downto 0) of std_logic_vector(7 downto 0);
 
 -- come da esempio su specifica
-signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 4 , 8)),
-                         1 => std_logic_vector(to_unsigned( 13 , 8)),
-                         2 => std_logic_vector(to_unsigned( 22 , 8)),
+signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 20 , 8)),
+                         1 => std_logic_vector(to_unsigned( 37 , 8)),
+                         2 => std_logic_vector(to_unsigned( 6 , 8)),
                          3 => std_logic_vector(to_unsigned( 31 , 8)),
-                         4 => std_logic_vector(to_unsigned( 37 , 8)),
-                         5 => std_logic_vector(to_unsigned( 45 , 8)),
-                         6 => std_logic_vector(to_unsigned( 77 , 8)),
-                         7 => std_logic_vector(to_unsigned( 91 , 8)),
+                         4 => std_logic_vector(to_unsigned( 14 , 8)),
+                         5 => std_logic_vector(to_unsigned( 44 , 8)),
+                         6 => std_logic_vector(to_unsigned( 70 , 8)),
+                         7 => std_logic_vector(to_unsigned( 99 , 8)),
                          8 => std_logic_vector(to_unsigned( 42 , 8)),
 			 others => (others =>'0'));
 
