@@ -19,19 +19,18 @@ signal   mem_we		        : std_logic;
 
 type ram_type is array (65535 downto 0) of std_logic_vector(7 downto 0);
 
-signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 5 , 8)),
-                         1 => std_logic_vector(to_unsigned( 21 , 8)),
-                         2 => std_logic_vector(to_unsigned( 88 , 8)),
-                         3 => std_logic_vector(to_unsigned( 31 , 8)),
-                         4 => std_logic_vector(to_unsigned( 11 , 8)),
-                         5 => std_logic_vector(to_unsigned( 51 , 8)),
-                         6 => std_logic_vector(to_unsigned( 66 , 8)),
-                         7 => std_logic_vector(to_unsigned( 44 , 8)),
-                         8 => std_logic_vector(to_unsigned( 11 , 8)),
+signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 96 , 8)),
+                         1 => std_logic_vector(to_unsigned( 100 , 8)),
+                         2 => std_logic_vector(to_unsigned( 104 , 8)),
+                         3 => std_logic_vector(to_unsigned( 108 , 8)),
+                         4 => std_logic_vector(to_unsigned( 112 , 8)),
+                         5 => std_logic_vector(to_unsigned( 116 , 8)),
+                         6 => std_logic_vector(to_unsigned( 120 , 8)),
+                         7 => std_logic_vector(to_unsigned( 124 , 8)),
+                         8 => std_logic_vector(to_unsigned( 127 , 8)),
 			 others => (others =>'0'));
 
--- da riutilizzare con RAM senza fare reset
-signal RAM2: ram_type := (0 => std_logic_vector(to_unsigned( 5 , 8)),
+signal RAM2: ram_type := (0 => std_logic_vector(to_unsigned( 124 , 8)),
                          1 => std_logic_vector(to_unsigned( 21 , 8)),
                          2 => std_logic_vector(to_unsigned( 88 , 8)),
                          3 => std_logic_vector(to_unsigned( 31 , 8)),
@@ -39,7 +38,7 @@ signal RAM2: ram_type := (0 => std_logic_vector(to_unsigned( 5 , 8)),
                          5 => std_logic_vector(to_unsigned( 51 , 8)),
                          6 => std_logic_vector(to_unsigned( 66 , 8)),
                          7 => std_logic_vector(to_unsigned( 44 , 8)),
-                         8 => std_logic_vector(to_unsigned( 120 , 8)),
+                         8 => std_logic_vector(to_unsigned( 127 , 8)),
 			 others => (others =>'0'));
 shared variable counter : integer := 1;
 
@@ -120,6 +119,15 @@ begin
     tb_rst <= '1';
     wait for c_CLOCK_PERIOD;
     tb_rst <= '0';
+    
+    
+    counter := counter + 1;
+    wait for c_CLOCK_PERIOD;
+    tb_rst <= '1';
+    wait for c_CLOCK_PERIOD;
+    tb_rst <= '0';
+    
+    
     wait for c_CLOCK_PERIOD;
     tb_start <= '1';
     wait for c_CLOCK_PERIOD;
@@ -129,13 +137,13 @@ begin
     wait until tb_done = '0';
     wait for 100 ns;
 
-    -- Maschera di output = 1 - 100 - 0001
-    assert RAM(9) = std_logic_vector(to_unsigned( 193 , 8)) report "TEST 1 FALLITO. Expected  193  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
+    -- Maschera di output = 1 - 111 - 1000
+    assert RAM2(9) = std_logic_vector(to_unsigned( 136 , 8)) report "TEST 1 FALLITO. Expected  136  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
 
     assert false report "Simulation Ended!, TEST 1 PASSATO" severity failure;
 
     -- RAM2
-    counter := counter + 1;
+    counter := counter - 1;
     wait for c_CLOCK_PERIOD;
     tb_start <= '1';
     wait for c_CLOCK_PERIOD;
@@ -144,8 +152,9 @@ begin
     tb_start <= '0';
     wait until tb_done = '0';
     wait for 100 ns;
-
-    assert RAM2(9) = std_logic_vector(to_unsigned( 120 , 8)) report "TEST 2 FALLITO. Expected  120 found " & integer'image(to_integer(unsigned(RAM2(9))))  severity failure;
+    
+    -- Maschera di output = 1 - 111 - 1000
+    assert RAM(9) = std_logic_vector(to_unsigned( 248 , 8)) report "TEST 2 FALLITO. Expected  248 found " & integer'image(to_integer(unsigned(RAM2(9))))  severity failure;
 
     assert false report "Simulation Ended!, TEST 2 PASSATO" severity failure;
 

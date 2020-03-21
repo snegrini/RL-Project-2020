@@ -6,30 +6,33 @@ use ieee.std_logic_unsigned.all;
 entity all_multi_tb is
 end all_multi_tb;
 
+
 architecture projecttb of all_multi_tb is
-constant c_CLOCK_PERIOD		: time := 100 ns;
-signal   tb_done		: std_logic;
-signal   mem_address		: std_logic_vector (15 downto 0) := (others => '0');
+constant c_CLOCK_PERIOD		    : time := 100 ns;
+signal   tb_done		        : std_logic;
+signal   mem_address		    : std_logic_vector (15 downto 0) := (others => '0');
 signal   tb_rst	                : std_logic := '0';
-signal   tb_start		: std_logic := '0';
-signal   tb_clk		        : std_logic := '0';
+signal   tb_start		        : std_logic := '0';
+signal   tb_clk		            : std_logic := '0';
 signal   mem_o_data,mem_i_data	: std_logic_vector (7 downto 0);
-signal   enable_wire  		: std_logic;
-signal   mem_we		        : std_logic;
+signal   enable_wire  		    : std_logic;
+signal   mem_we		            : std_logic;
 
 type ram_type is array (65535 downto 0) of std_logic_vector(7 downto 0);
 
 -- come da esempio su specifica
-signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 95 , 8)),
-                         1 => std_logic_vector(to_unsigned( 85 , 8)),
-                         2 => std_logic_vector(to_unsigned( 35 , 8)),
-                         3 => std_logic_vector(to_unsigned( 69 , 8)),
-                         4 => std_logic_vector(to_unsigned( 124 , 8)),
-                         5 => std_logic_vector(to_unsigned( 18 , 8)),
-                         6 => std_logic_vector(to_unsigned( 103 , 8)),
-                         7 => std_logic_vector(to_unsigned( 0 , 8)),
-                         8 => std_logic_vector(to_unsigned( 3 , 8)),
-			 others => (others =>'0'));
+signal RAM: ram_type := (0 => std_logic_vector(to_unsigned( 4 , 8)),
+                         1 => std_logic_vector(to_unsigned( 13 , 8)),
+                         2 => std_logic_vector(to_unsigned( 22 , 8)),
+                         3 => std_logic_vector(to_unsigned( 34 , 8)),
+                         4 => std_logic_vector(to_unsigned( 37 , 8)),
+                         5 => std_logic_vector(to_unsigned( 45 , 8)),
+                         6 => std_logic_vector(to_unsigned( 77 , 8)),
+                         7 => std_logic_vector(to_unsigned( 91 , 8)),
+                         8 => std_logic_vector(to_unsigned( 33 , 8)),
+                         others => (others =>'0'));
+                         
+signal count : integer := 0;
 
 component project_reti_logiche is
 port (
@@ -75,6 +78,23 @@ begin
                 RAM(conv_integer(mem_address))  <= mem_i_data;
                 mem_o_data                      <= mem_i_data after 1 ns;
             else
+                if (conv_integer(mem_address) = 8) then
+                    if (count = 0) then
+                        RAM <= (
+                            0 => std_logic_vector(to_unsigned( 4 , 8)),
+                            1 => std_logic_vector(to_unsigned( 13 , 8)),
+                            2 => std_logic_vector(to_unsigned( 22 , 8)),
+                            3 => std_logic_vector(to_unsigned( 31 , 8)),
+                            4 => std_logic_vector(to_unsigned( 39 , 8)),
+                            5 => std_logic_vector(to_unsigned( 45 , 8)),
+                            6 => std_logic_vector(to_unsigned( 77 , 8)),
+                            7 => std_logic_vector(to_unsigned( 91 , 8)),
+                            8 => RAM(8),
+                            others => (others =>'0')
+                        );
+                        count <= 1;
+                    end if;
+                end if;
                 mem_o_data <= RAM(conv_integer(mem_address)) after 1 ns;
             end if;
         end if;
@@ -91,30 +111,39 @@ begin
     tb_rst <= '0';
     wait for c_CLOCK_PERIOD;
     tb_start <= '1';
+    
+    wait for c_CLOCK_PERIOD;
+    wait for c_CLOCK_PERIOD;
+    wait for c_CLOCK_PERIOD;     
+    tb_rst <= '1';
+    wait for c_CLOCK_PERIOD;  
+    tb_rst <= '0';
+    
+    wait for c_CLOCK_PERIOD;
     wait until tb_done = '1';
     wait for c_CLOCK_PERIOD;
     tb_start <= '0';
     wait until tb_done = '0';
 
-    -- Maschera di output = 1 - 111 - 1000
-    assert RAM(9) = std_logic_vector(to_unsigned( 248, 8)) report "TEST FALLITO. Expected  248  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
-			
---	--wait for 90 ns;
---    wait for c_CLOCK_PERIOD;
---    tb_rst <= '1';
---    wait for c_CLOCK_PERIOD;
---    tb_rst <= '0';
---    wait for c_CLOCK_PERIOD;
---    tb_start <= '1';
---    wait until tb_done = '1';
---    wait for c_CLOCK_PERIOD;
---    tb_start <= '0';
---    wait until tb_done = '0';	
-
---    -- Maschera di output = 1 - 010 - 0100
---    assert RAM(9) = std_logic_vector(to_unsigned( 161, 8)) report "TEST FALLITO. Expected  161  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
- 
-    assert false report "Simulation Ended!, TEST PASSATO" severity failure;
+    -- Maschera di output = 0 - 33
+    assert RAM(9) = std_logic_vector(to_unsigned( 33 , 8)) report "TEST FALLITO. Expected 33  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
+    report "TEST #1 PASSATO. RAM(9) = " & integer'image(to_integer(unsigned(RAM(9))));
+    
+    -- Test #2. Cambia solo l'indirizzo target. Gli indirizzi WZ rimangono gli stessi.       
+    -- Test #3. Cambia solo una WZ. L'indirizzo target rimane lo stesso.
+    --wait for c_CLOCK_PERIOD;
+    --tb_start <= '1';
+    --wait for c_CLOCK_PERIOD;
+    --wait until tb_done = '1';
+    --wait for c_CLOCK_PERIOD;
+    --tb_start <= '0';
+    --wait until tb_done = '0';
+    
+    -- Maschera di output = 1 - 011 - 0100 (180)
+    assert RAM(9) = std_logic_vector(to_unsigned( 180 , 8)) report "TEST FALLITO. Expected  180  found " & integer'image(to_integer(unsigned(RAM(9))))  severity failure;
+    report "TEST #2 PASSATO. RAM(9) = " & integer'image(to_integer(unsigned(RAM(9))));
+        
+    assert false report "Simulation Ended!, TUTTI TEST PASSATI" severity failure;
 end process test;
 
 end projecttb; 
