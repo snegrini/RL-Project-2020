@@ -1,1 +1,1 @@
--wto "e7bf0e48b1c44d05ab4d981a95f56097" --incr --debug "typical" --relax --mt "8" -L "xil_defaultlib" -L "secureip" --snapshot "project_tb_multi_reset_behav" "xil_defaultlib.project_tb_multi_reset" -log "elaborate.log" 
+-wto "e7bf0e48b1c44d05ab4d981a95f56097" --debug "typical" --relax --mt "8" -L "xil_defaultlib" -L "secureip" --snapshot "project_tb_multi_reset_behav" "xil_defaultlib.project_tb_multi_reset" -log "elaborate.log" 

@@ -1,7 +1,7 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
--- Date        : Fri Mar 20 12:13:08 2020
+-- Date        : Wed Mar 25 13:39:30 2020
 -- Host        : dumevm running 64-bit Ubuntu 16.04.6 LTS
 -- Command     : write_vhdl -mode funcsim -nolib -force -file
 --               /home/snegrini/Documents/RL-Project-2020-new/rl_project_2020/rl_project_2020.sim/autogen/synth/func/xsim/project_tb_func_synth.vhd
@@ -49,13 +49,7 @@ architecture STRUCTURE of project_reti_logiche is
   signal \o_address_reg[2]_i_2_n_0\ : STD_LOGIC;
   signal \o_address_reg[3]_i_1_n_0\ : STD_LOGIC;
   signal o_data_OBUF : STD_LOGIC_VECTOR ( 7 downto 0 );
-  signal \o_data_reg[0]_i_1_n_0\ : STD_LOGIC;
-  signal \o_data_reg[1]_i_1_n_0\ : STD_LOGIC;
-  signal \o_data_reg[2]_i_1_n_0\ : STD_LOGIC;
-  signal \o_data_reg[3]_i_1_n_0\ : STD_LOGIC;
-  signal \o_data_reg[4]_i_1_n_0\ : STD_LOGIC;
-  signal \o_data_reg[5]_i_1_n_0\ : STD_LOGIC;
-  signal \o_data_reg[6]_i_1_n_0\ : STD_LOGIC;
+  signal o_data_next : STD_LOGIC_VECTOR ( 7 downto 0 );
   signal o_done_OBUF : STD_LOGIC;
   signal o_done_next : STD_LOGIC;
   signal o_en_OBUF : STD_LOGIC;
@@ -110,37 +104,22 @@ architecture STRUCTURE of project_reti_logiche is
   signal NLW_wz_bit_reg_i_2_O_UNCONNECTED : STD_LOGIC_VECTOR ( 3 downto 0 );
   signal \NLW_wz_offset_reg[1]_i_3_CO_UNCONNECTED\ : STD_LOGIC_VECTOR ( 3 to 3 );
   attribute SOFT_HLUTNM : string;
-  attribute SOFT_HLUTNM of \FSM_sequential_pres_state[0]_i_1\ : label is "soft_lutpair1";
+  attribute SOFT_HLUTNM of \FSM_sequential_pres_state[0]_i_1\ : label is "soft_lutpair3";
   attribute SOFT_HLUTNM of \FSM_sequential_pres_state[1]_i_1\ : label is "soft_lutpair0";
   attribute FSM_ENCODED_STATES : string;
   attribute FSM_ENCODED_STATES of \FSM_sequential_pres_state_reg[0]\ : label is "fetch_addr:001,get_addr:011,done:101,write_back:100,wait_ram:010,idle:000,iSTATE:110";
   attribute FSM_ENCODED_STATES of \FSM_sequential_pres_state_reg[1]\ : label is "fetch_addr:001,get_addr:011,done:101,write_back:100,wait_ram:010,idle:000,iSTATE:110";
   attribute FSM_ENCODED_STATES of \FSM_sequential_pres_state_reg[2]\ : label is "fetch_addr:001,get_addr:011,done:101,write_back:100,wait_ram:010,idle:000,iSTATE:110";
-  attribute SOFT_HLUTNM of is_target_address_set_i_1 : label is "soft_lutpair1";
-  attribute SOFT_HLUTNM of \o_address_reg[2]_i_2\ : label is "soft_lutpair5";
-  attribute XILINX_LEGACY_PRIM : string;
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[0]\ : label is "LD";
-  attribute SOFT_HLUTNM of \o_data_reg[0]_i_1\ : label is "soft_lutpair4";
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[1]\ : label is "LD";
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[2]\ : label is "LD";
-  attribute SOFT_HLUTNM of \o_data_reg[2]_i_1\ : label is "soft_lutpair8";
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[3]\ : label is "LD";
-  attribute SOFT_HLUTNM of \o_data_reg[3]_i_1\ : label is "soft_lutpair8";
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[4]\ : label is "LD";
-  attribute SOFT_HLUTNM of \o_data_reg[4]_i_1\ : label is "soft_lutpair7";
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[5]\ : label is "LD";
-  attribute SOFT_HLUTNM of \o_data_reg[5]_i_1\ : label is "soft_lutpair5";
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[6]\ : label is "LD";
-  attribute SOFT_HLUTNM of \o_data_reg[6]_i_1\ : label is "soft_lutpair7";
-  attribute XILINX_LEGACY_PRIM of \o_data_reg[7]\ : label is "LD";
-  attribute SOFT_HLUTNM of \o_data_reg[7]_i_1\ : label is "soft_lutpair6";
-  attribute SOFT_HLUTNM of o_done_i_1 : label is "soft_lutpair6";
+  attribute SOFT_HLUTNM of is_target_address_set_i_1 : label is "soft_lutpair3";
+  attribute SOFT_HLUTNM of \o_data[0]_i_1\ : label is "soft_lutpair1";
+  attribute SOFT_HLUTNM of \o_data[7]_i_1\ : label is "soft_lutpair1";
+  attribute SOFT_HLUTNM of o_done_i_1 : label is "soft_lutpair5";
   attribute SOFT_HLUTNM of o_en_i_1 : label is "soft_lutpair0";
-  attribute SOFT_HLUTNM of wz_bit_i_1 : label is "soft_lutpair3";
+  attribute SOFT_HLUTNM of o_we_i_1 : label is "soft_lutpair5";
+  attribute SOFT_HLUTNM of wz_bit_i_1 : label is "soft_lutpair4";
   attribute SOFT_HLUTNM of \wz_offset[0]_i_1\ : label is "soft_lutpair2";
-  attribute SOFT_HLUTNM of \wz_offset[3]_i_3\ : label is "soft_lutpair3";
+  attribute SOFT_HLUTNM of \wz_offset[3]_i_3\ : label is "soft_lutpair4";
   attribute SOFT_HLUTNM of \wz_offset[3]_i_4\ : label is "soft_lutpair2";
-  attribute SOFT_HLUTNM of \wz_offset[3]_i_6\ : label is "soft_lutpair4";
 begin
 \FSM_sequential_pres_state[0]_i_1\: unisim.vcomponents.LUT4
     generic map(
@@ -500,6 +479,100 @@ is_target_address_set_reg: unisim.vcomponents.FDCE
       Q => o_address_OBUF(3),
       R => '0'
     );
+\o_data[0]_i_1\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"0E000200"
+    )
+        port map (
+      I0 => \target_address_reg_n_0_[0]\,
+      I1 => wz_bit,
+      I2 => pres_state(0),
+      I3 => pres_state(2),
+      I4 => wz_offset(0),
+      O => o_data_next(0)
+    );
+\o_data[1]_i_1\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"0E000200"
+    )
+        port map (
+      I0 => \target_address_reg_n_0_[1]\,
+      I1 => wz_bit,
+      I2 => pres_state(0),
+      I3 => pres_state(2),
+      I4 => wz_offset(1),
+      O => o_data_next(1)
+    );
+\o_data[2]_i_1\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"0E000200"
+    )
+        port map (
+      I0 => \target_address_reg_n_0_[2]\,
+      I1 => wz_bit,
+      I2 => pres_state(0),
+      I3 => pres_state(2),
+      I4 => wz_offset(2),
+      O => o_data_next(2)
+    );
+\o_data[3]_i_1\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"0E000200"
+    )
+        port map (
+      I0 => \target_address_reg_n_0_[3]\,
+      I1 => wz_bit,
+      I2 => pres_state(0),
+      I3 => pres_state(2),
+      I4 => wz_offset(3),
+      O => o_data_next(3)
+    );
+\o_data[4]_i_1\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"0E000200"
+    )
+        port map (
+      I0 => \target_address_reg_n_0_[4]\,
+      I1 => wz_bit,
+      I2 => pres_state(0),
+      I3 => pres_state(2),
+      I4 => o_address_OBUF(0),
+      O => o_data_next(4)
+    );
+\o_data[5]_i_1\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"0E000200"
+    )
+        port map (
+      I0 => \target_address_reg_n_0_[5]\,
+      I1 => wz_bit,
+      I2 => pres_state(0),
+      I3 => pres_state(2),
+      I4 => o_address_OBUF(1),
+      O => o_data_next(5)
+    );
+\o_data[6]_i_1\: unisim.vcomponents.LUT5
+    generic map(
+      INIT => X"00CA0000"
+    )
+        port map (
+      I0 => \target_address_reg_n_0_[6]\,
+      I1 => o_address_OBUF(2),
+      I2 => wz_bit,
+      I3 => pres_state(0),
+      I4 => pres_state(2),
+      O => o_data_next(6)
+    );
+\o_data[7]_i_1\: unisim.vcomponents.LUT3
+    generic map(
+      INIT => X"20"
+    )
+        port map (
+      I0 => wz_bit,
+      I1 => pres_state(0),
+      I2 => pres_state(2),
+      O => o_data_next(7)
+    );
 \o_data_OBUF[0]_inst\: unisim.vcomponents.OBUF
      port map (
       I => o_data_OBUF(0),
@@ -540,172 +613,93 @@ is_target_address_set_reg: unisim.vcomponents.FDCE
       I => o_data_OBUF(7),
       O => o_data(7)
     );
-\o_data_reg[0]\: unisim.vcomponents.LDCE
+\o_data_reg[0]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => \o_data_reg[0]_i_1_n_0\,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(0)
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(0),
+      Q => o_data_OBUF(0),
+      R => '0'
     );
-\o_data_reg[0]_i_1\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"B8"
-    )
-        port map (
-      I0 => wz_offset(0),
-      I1 => wz_bit,
-      I2 => \target_address_reg_n_0_[0]\,
-      O => \o_data_reg[0]_i_1_n_0\
-    );
-\o_data_reg[1]\: unisim.vcomponents.LDCE
+\o_data_reg[1]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => \o_data_reg[1]_i_1_n_0\,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(1)
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(1),
+      Q => o_data_OBUF(1),
+      R => '0'
     );
-\o_data_reg[1]_i_1\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"B8"
-    )
-        port map (
-      I0 => wz_offset(1),
-      I1 => wz_bit,
-      I2 => \target_address_reg_n_0_[1]\,
-      O => \o_data_reg[1]_i_1_n_0\
-    );
-\o_data_reg[2]\: unisim.vcomponents.LDCE
+\o_data_reg[2]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => \o_data_reg[2]_i_1_n_0\,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(2)
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(2),
+      Q => o_data_OBUF(2),
+      R => '0'
     );
-\o_data_reg[2]_i_1\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"B8"
-    )
-        port map (
-      I0 => wz_offset(2),
-      I1 => wz_bit,
-      I2 => \target_address_reg_n_0_[2]\,
-      O => \o_data_reg[2]_i_1_n_0\
-    );
-\o_data_reg[3]\: unisim.vcomponents.LDCE
+\o_data_reg[3]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => \o_data_reg[3]_i_1_n_0\,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(3)
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(3),
+      Q => o_data_OBUF(3),
+      R => '0'
     );
-\o_data_reg[3]_i_1\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"B8"
-    )
-        port map (
-      I0 => wz_offset(3),
-      I1 => wz_bit,
-      I2 => \target_address_reg_n_0_[3]\,
-      O => \o_data_reg[3]_i_1_n_0\
-    );
-\o_data_reg[4]\: unisim.vcomponents.LDCE
+\o_data_reg[4]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => \o_data_reg[4]_i_1_n_0\,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(4)
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(4),
+      Q => o_data_OBUF(4),
+      R => '0'
     );
-\o_data_reg[4]_i_1\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"B8"
-    )
-        port map (
-      I0 => o_address_OBUF(0),
-      I1 => wz_bit,
-      I2 => \target_address_reg_n_0_[4]\,
-      O => \o_data_reg[4]_i_1_n_0\
-    );
-\o_data_reg[5]\: unisim.vcomponents.LDCE
+\o_data_reg[5]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => \o_data_reg[5]_i_1_n_0\,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(5)
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(5),
+      Q => o_data_OBUF(5),
+      R => '0'
     );
-\o_data_reg[5]_i_1\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"B8"
-    )
-        port map (
-      I0 => o_address_OBUF(1),
-      I1 => wz_bit,
-      I2 => \target_address_reg_n_0_[5]\,
-      O => \o_data_reg[5]_i_1_n_0\
-    );
-\o_data_reg[6]\: unisim.vcomponents.LDCE
+\o_data_reg[6]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => \o_data_reg[6]_i_1_n_0\,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(6)
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(6),
+      Q => o_data_OBUF(6),
+      R => '0'
     );
-\o_data_reg[6]_i_1\: unisim.vcomponents.LUT3
-    generic map(
-      INIT => X"B8"
-    )
-        port map (
-      I0 => o_address_OBUF(2),
-      I1 => wz_bit,
-      I2 => \target_address_reg_n_0_[6]\,
-      O => \o_data_reg[6]_i_1_n_0\
-    );
-\o_data_reg[7]\: unisim.vcomponents.LDCE
+\o_data_reg[7]\: unisim.vcomponents.FDRE
     generic map(
       INIT => '0'
     )
         port map (
-      CLR => '0',
-      D => wz_bit,
-      G => o_we_next,
-      GE => '1',
-      Q => o_data_OBUF(7)
-    );
-\o_data_reg[7]_i_1\: unisim.vcomponents.LUT2
-    generic map(
-      INIT => X"2"
-    )
-        port map (
-      I0 => pres_state(2),
-      I1 => pres_state(0),
-      O => o_we_next
+      C => i_clk_IBUF_BUFG,
+      CE => \o_address_reg[3]_i_1_n_0\,
+      D => o_data_next(7),
+      Q => o_data_OBUF(7),
+      R => '0'
     );
 o_done_OBUF_inst: unisim.vcomponents.OBUF
      port map (
@@ -763,6 +757,15 @@ o_we_OBUF_inst: unisim.vcomponents.OBUF
      port map (
       I => o_we_OBUF,
       O => o_we
+    );
+o_we_i_1: unisim.vcomponents.LUT2
+    generic map(
+      INIT => X"2"
+    )
+        port map (
+      I0 => pres_state(2),
+      I1 => pres_state(0),
+      O => o_we_next
     );
 o_we_reg: unisim.vcomponents.FDCE
     generic map(

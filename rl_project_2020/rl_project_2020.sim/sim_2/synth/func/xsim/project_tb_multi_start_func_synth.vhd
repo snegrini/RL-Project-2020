@@ -1,7 +1,7 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
--- Date        : Sat Mar 21 13:49:26 2020
+-- Date        : Wed Mar 25 17:25:32 2020
 -- Host        : dumevm running 64-bit Ubuntu 16.04.6 LTS
 -- Command     : write_vhdl -mode funcsim -nolib -force -file
 --               /home/snegrini/Documents/RL-Project-2020-new/rl_project_2020/rl_project_2020.sim/sim_2/synth/func/xsim/project_tb_multi_start_func_synth.vhd

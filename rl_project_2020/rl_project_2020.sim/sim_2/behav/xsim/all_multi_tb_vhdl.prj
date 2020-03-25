@@ -1,9 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../rl_project_2020.srcs/sources_1/new/10539341.vhd" \
-"../../../../rl_project_2020.srcs/sim_2/imports/Desktop/multi_reset.vhd" \
-"../../../../rl_project_2020.srcs/sim_2/imports/Desktop/multi_start_fix.vhd" \
-"../../../../rl_project_2020.srcs/sim_2/new/all_multi_tb.vhd" \
-
-# Do not sort compile order
-nosort
