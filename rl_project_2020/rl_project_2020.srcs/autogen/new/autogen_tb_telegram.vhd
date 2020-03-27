@@ -65,7 +65,7 @@ begin
 end process p_CLK_GEN;
 
 MEM : process(tb_clk)
-    file read_file : text open read_mode is "/home/snegrini/Desktop/Auto_300k/ram_content.txt"; --<<<<<<<<<<<<<<<<--------------------------------- QUI DA CAMBIARE
+    file read_file : text open read_mode is "/home/snegrini/Desktop/1.5M fixed double start/ram_content.txt"; --<<<<<<<<<<<<<<<<--------------------------------- QUI DA CAMBIARE
     variable read_line : line;
     variable R : ram_type;
     variable handler : integer;
@@ -90,8 +90,8 @@ begin
 end process;
 
 test : process is
-  file write_file : text open write_mode is "/home/snegrini/Desktop/Auto_300k/passati.txt"; --<<<<<<<<<<<<<<<<--------------------------------- QUI DA CAMBIARE
-  file err_write_file : text open write_mode is "/home/snegrini/Desktop/Auto_300k/non_passati.txt"; --<<<<<<<<<<<<<<<<--------------------------------- QUI DA CAMBIARE
+  file write_file : text open write_mode is "/home/snegrini/Desktop/1.5M fixed double start/passati.txt"; --<<<<<<<<<<<<<<<<--------------------------------- QUI DA CAMBIARE
+  file err_write_file : text open write_mode is "/home/snegrini/Desktop/1.5M fixed double start/non_passati.txt"; --<<<<<<<<<<<<<<<<--------------------------------- QUI DA CAMBIARE
   variable write_line , err_write_line : line;
   variable count : integer := 0;
   variable errors : boolean := false;
