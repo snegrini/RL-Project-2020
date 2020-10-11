@@ -1,8 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"project_tb_func_synth.vhd" \
-"../../../../../rl_project_2020.srcs/sim_1/imports/new/tb_pfrl_2020_in_wz.vhd" \
-"../../../../../rl_project_2020.srcs/sim_1/imports/new/tb_pfrl_2020_no_wz.vhd" \
-
-# Do not sort compile order
-nosort

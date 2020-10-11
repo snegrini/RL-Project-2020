@@ -1,7 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"project_tb_func_synth.vhd" \
-"../../../../../rl_project_2020.srcs/autogen/new/autogen_tb_telegram.vhd" \
-
-# Do not sort compile order
-nosort

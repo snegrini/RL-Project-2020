@@ -3,7 +3,7 @@
 -- Prova Finale (Progetto di Reti Logiche)
 -- Docente: Fabio Salice - A.A. 2019/2020
 -- 
--- Samuele Negrini (Codice Persona 10539341 - Matricola 866797)
+-- Samuele Negrini
 --
 ----------------------------------------------------------------------------------
 

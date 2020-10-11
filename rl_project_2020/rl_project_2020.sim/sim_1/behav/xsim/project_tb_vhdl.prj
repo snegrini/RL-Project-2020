@@ -1,8 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../rl_project_2020.srcs/sources_1/new/10539341.vhd" \
-"../../../../rl_project_2020.srcs/sim_1/imports/new/tb_pfrl_2020_in_wz.vhd" \
-"../../../../rl_project_2020.srcs/sim_1/imports/new/tb_pfrl_2020_no_wz.vhd" \
-
-# Do not sort compile order
-nosort
