@@ -1,0 +1,54 @@
+\tikzstyle{freecell}=[fill=black!10]
+\tikzstyle{occupiedcell}=[fill=black!10]
+
+\renewcommand{\llcell}[3]{
+	\addtocounter{cellnb}{-#1}
+	\setcounter{ptrnb}{0}
+	\draw[#2] (0,\value{cellnb}) +(-2.8,-.5) rectangle +(2.8,-.5+#1);
+	\draw (0,\value{cellnb}+#1/2-0.5)  node(currentcell) {#3};
+}
+
+\renewcommand{\finishframe}[1]{
+	\draw[snake=brace, line width=0.6pt, segment amplitude=8pt]
+	(-2.8,\value{cellnb}-0.5) -- (-2.8,\value{startframe}-0.5);
+	\draw (-5.4cm,\value{cellnb}*0.5+\value{startframe}*0.5-0.7) node
+	{\parbox{3cm}{%
+	\begin{flushright}
+		#1
+	\end{flushright}}};
+}
+
+\renewcommand{\separator}[1][freecell,very thick]{
+	\draw[#1] (0,\value{cellnb}) +(-2.8,-.5) -- +(2.8,-.5);
+}
+
+\renewcommand{\cellcom}[1]{
+	\draw (3.1,\value{ptrnb}*0.5+\value{cellnb}) node[anchor=west] {#1};
+	\addtocounter{ptrnb}{1}
+}
+
+\renewcommand{\stackbottom}[1][freecell]{
+	\addtocounter{cellnb}{-1}
+	\draw[#1] (0,\value{cellnb})
+	+(-2.8,-.5) -- +(-2.8,+.5) -- +(2.8,+.5) -- +(2.8,-.5);
+	\draw (0,\value{cellnb}) node{...};
+}
+
+
+\begin{tikzpicture}[scale=0.8]
+	\small
+	\cell[draw=none]{RAM} \cellcom{Indirizzo}
+	\startframe
+	\cell{Indirizzo Base WZ 0}        \cellcom{0}
+	\cell{Indirizzo Base WZ 1}        \cellcom{1}
+	\cell{...} \cellcom{...}
+	\cell{Indirizzo Base WZ 7} \cellcom{7}
+	\cell{Indirizzo da codificare}     \cellcom{8}
+	\finishframe{Input del componente}
+	\separator
+	\cell{Indirizzo codificato} \cellcom{9}
+	\stackbottom{}
+	
+	\draw[->, thick] (-3.8,-7) --  node[left=2pt,xshift=-4mm]{Output del componente} (-2.8,-7);
+	
+\end{tikzpicture}

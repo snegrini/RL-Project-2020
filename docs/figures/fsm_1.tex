@@ -1,0 +1,33 @@
+\tikzset{
+	loop above/.style={% original: above, in=75, out=105 loop
+		above, in=75, out=105, loop,
+		every loop/.append style={looseness=7}
+	},
+	loop right/.style={
+		right, in=320, out=350, loop,
+		every loop/.append style={looseness=7}
+	}	
+}
+
+\begin{tikzpicture}[shorten >=1pt,font=\footnotesize,node distance=5cm,on grid,auto,
+					initial text = {\lstinline[columns=fixed]{i_rst}='1'},
+					state/.style={circle, draw, minimum size=2.5cm}] 
+	\node[state,initial] (q_0)   {\texttt{IDLE}}; 
+	\node[state] (q_1) [above right=of q_0] {\texttt{FETCH\_ADDR}}; 
+	\node[state] (q_2) [right=of q_1] {\texttt{WAIT\_RAM}};
+	\node[state] (q_3) [below=of q_2] {\texttt{GET\_ADDR}}; 
+	\node[state](q_4) [below=of q_3] {\texttt{WRITE\_BACK}};
+	\node[state](q_5) [left=of q_4] {\texttt{DONE}};
+	
+	\path[->] 
+	(q_0) edge node {\lstinline[columns=fixed]{i_start}='1'} (q_1)
+	      edge [loop right] node {\lstinline[columns=fixed]{i_start}='0'} ()
+	(q_1) edge node {--} (q_2)
+	(q_2) edge [bend left=45] node {--} (q_3)
+	(q_3) edge [bend left=45] node [align=center] {"WZ non trovata"\\AND\\"altre WZ da analizzare"} (q_2)
+	(q_3) edge node [align=center] {"WZ trovata"\\OR\\"finite WZ da analizzare"} (q_4)
+	(q_4) edge node {--} (q_5)	  
+	(q_5) edge [bend left] node {\lstinline[columns=fixed]{i_start}='0'} (q_0)
+		  edge [loop above] node {\lstinline[columns=fixed]{i_start}='1'} ()
+	;
+\end{tikzpicture}

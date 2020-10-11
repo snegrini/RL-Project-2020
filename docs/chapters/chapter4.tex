@@ -1,0 +1,64 @@
+\section{Risultati della sintesi}
+Il componente è stato sintetizzato con successo. Di seguito vengono riportati alcuni dei risultati ottenuti durante questa fase.
+
+\subsection{Registri sintetizzati}
+In Tabella \ref{table:registers} sono elencati i registri sintetizzati.
+
+\begin{table}[!htb]
+	\centering
+	\setlength{\belowcaptionskip}{-0.5cm}
+	
+	\begin{tabular}{ |c|c|l| }
+		\hline
+		\textbf{\# bit} & \textbf{Quantità} & \textbf{Descrizione} \\
+		\hline
+		16 & 1 & \specialcell{Indirizzo della RAM. \\ Si utilizzano 16 bit per semplificarne la gestione.} \\ \hline
+		 8 & 2 & \specialcell{Indirizzo da codificare e indirizzo codificato in uscita. \\Vengono salvati per assicurare la corretta propagazione dei segnali.} \\ \hline
+		 4 & 1 & \specialcell{Offset dell'indirizzo (${WZ}_{OFFSET}$).} \\ \hline
+		 3 & 1 & \specialcell{Stato presente della macchina.\\ Sono necessari 3 bit per la codifica dei sei stati.} \\ \hline
+		 1 & 5 & \specialcell{${WZ}_{BIT}$, segnale di controllo e tre segnali di uscita del componente.}\\
+		\hline
+	\end{tabular}
+
+	\caption{}
+	\label{table:registers}	
+\end{table}
+
+\subsection{Area utilizzata sulla FPGA}
+Come da scelte progettuali, si è cercato di ridurre al minimo l'area occupata dal componente sulla FPGA target. Nell'ottica di realizzare componenti più complessi, si è ritenuto che questo encoder non dovesse richiedere risorse che andrebbero impiegate per altri scopi.\newline
+Dal report fornito dallo strumento di sviluppo Vivado otteniamo le seguenti percentuali di area occupata rispetto alla FPGA target utilizzata.
+
+\begin{table}[!htb]
+	\centering
+	\setlength{\belowcaptionskip}{-0.5cm}
+	
+	\begin{tabular}{ |c|c|c|c| }
+		\hline
+		\textbf{Tipo} & \textbf{Utilizzati} & \textbf{Disponibili} & \textbf{Percentuale} \\
+		\hline
+		FF & 32 & 269200 & 0.01\%\\ \hline
+		LUT & 39 & 134600 & 0.03\%\\
+		\hline
+	\end{tabular}
+	
+	\caption{}
+	\label{table:area}	
+\end{table}
+
+
+\subsection{Frequenza di funzionamento}
+Con un calcolo approssimativo è possibile ottenere la massima frequenza a cui può operare il componente. Si consideri il periodo di clock $T_{clk}$ di $100 ns$ (da specifica). Dal report si ottiene un \textit{Worst Negative Slack} $WNS$ pari a $94.701 ns$. Il minimo periodo utilizzabile risulta:
+\abovedisplayshortskip=5pt
+\belowdisplayshortskip=8pt
+\begin{equation*}
+	T_{min} = T_{clk} - WNS = 100 ns - 94.701 ns = 5.299 ns
+\end{equation*}
+
+
+e quindi si ottiene la massima frequenza di funzionamento:
+
+\abovedisplayshortskip=5pt
+\belowdisplayshortskip=0pt
+\begin{equation*}
+	f_{max} = \frac{1}{T_{min}} = \frac{1}{5.299 ns} \approx 188.72 MHz.
+\end{equation*}

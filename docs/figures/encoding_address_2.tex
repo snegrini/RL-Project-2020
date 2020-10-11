@@ -1,0 +1,12 @@
+\tikzstyle{int}=[draw, fill=black!10, minimum size=4em]
+\tikzstyle{init} = [pin edge={to-,thin,black}]
+
+\centering
+
+\begin{tikzpicture}[node distance=6cm,auto,>=latex']
+    \node [int] (a) {ENCODER};
+    \node (b) [left of=a,node distance=5cm]{SOURCE};
+    \node (end) [right of=a, node distance=8cm]{DEST};
+    \path[->] (b) edge node {$ADDR$} (a);
+    \draw[->] (a) edge node {$1$ \& ${WZ}_{NUM}$ \& ${WZ}_{OFFSET}$} (end);
+\end{tikzpicture}

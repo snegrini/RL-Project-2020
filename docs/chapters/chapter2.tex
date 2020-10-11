@@ -1,0 +1,62 @@
+\section{Progettazione}
+Il modulo partirà nell'elaborazione quando il segnale {\small\lstinline[columns=fixed]{i_start}} in ingresso verrà portato a 1.\newline
+Il segnale \lstinline[columns=fixed]{i_start} rimarrà alto fino a che il segnale \lstinline[columns=fixed]{o_done} non verrà portato alto. Al termine della computazione (e una volta scritto il risultato in memoria), il modulo alza (cioè porta a 1) il segnale \lstinline[columns=fixed]{o_done} che notifica la fine dell'elaborazione. Se a questo punto viene rialzato il segnale \lstinline[columns=fixed]{i_start}, il modulo ripartirà con la fase di codifica.
+
+\subsection{Scelte progettuali}
+Si è scelto di descrivere il componente tramite una macchina a stati finiti (FSM).\newline
+In VHDL sono stati utilizzati due process:
+
+\begin{itemize}
+	\item Un process per descrivere la parte sequenziale della FSM, ovvero, rappresentare i re-gistri di stato. Questo process si occupa anche di riportare la macchina nello stato di reset in corrispondenza del valore attivo del segnale \lstinline[columns=fixed]{i_rst}.
+	
+	\item Un process per descrivere la parte combinatoria della FSM, ovvero, determinare lo stato in cui evolve il sistema in funzione dei segnali in ingresso e dello stato corrente. 
+\end{itemize}
+
+In particolare il modulo confronta gli indirizzi ADDR e WZ sfruttando l'operazione di \textbf{sottrazione} e, nel caso di ADDR appartenente alla Working Zone, codifica la differenza (offset) in one-hot.\newline
+La codifica one-hot è stata realizzata mediante l'uso di un registro inizializzato ad ogni avvio della FSM a "$0001$" e l'operazione di \textbf{shift} (a sinistra) di un numero pari alla differenza tra i due indirizzi.\newline
+In aggiunta, si è preferito tenere memorizzate nel componente meno informazioni possibili. Ciò ha favorito un'occupazione d'area del modulo (in termini di flip-flop e look-up tables) molto piccola rispetto alla FPGA scelta inizialmente.\newline
+Queste soluzioni offrono il \textbf{vantaggio di essere scalabili}, poiché se aumentasse il numero di working-zone da controllare, non sarebbe necessario aumentare di molto l'area del modulo solo per tenere memorizzati tutti gli indirizzi delle working-zone, nè reimplementare interamente parti del codice per supportare le ulteriori codifiche one-hot necessarie.\newline
+
+Inoltre si è adottato un approccio che cercasse di:
+\begin{itemize}
+	\item ridurre il numero di transizioni effettuate per portare a termine la codifica dell'indirizzo;
+	
+	\item chiedere un dato alla RAM solo quando strettamente necessario, in modo da minimizzare gli accessi in memoria. Per esempio, una volta trovata la working-zone di appartenenza dell'indirizzo da codificare, risulta inutile un controllo delle eventuali working-zone rimanenti.
+\end{itemize}
+Il tutto si è tradotto in una progettazione della FSM con un numero di stati ridotto e in un attento utilizzo dei bus per comunicare con la RAM. 
+
+\pagebreak
+
+\subsection{Macchina a stati}
+La macchina implementata (Figura \ref{fig:fsm_1}) è composta dai seguenti sei stati:
+
+\begin{itemize}[itemsep=10pt]
+	\item \texttt{IDLE}\newline
+	Stato iniziale di reset in cui si attende che venga alzato il segnale \lstinline[columns=fixed]{i_start}. In caso di segnale \lstinline[columns=fixed]{i_rst='1'} si torna in questo stato.
+	
+	\item \texttt{FETCH\_ADDR}\newline 
+	Stato in cui viene richiesto alla memoria l'indirizzo da codificare.
+	
+	\item \texttt{WAIT\_RAM}\newline
+	Stato in cui si attende la risposta della memoria dopo una richiesta di lettura.
+	
+	\item \texttt{GET\_ADDR}\newline
+	La prima volta (dopo un reset) che la macchina entra in questo stato viene memorizzato, in un apposito registro, l'indirizzo da codificare. Per risparmiare un periodo di clock, viene inoltre richiesto alla memoria l'indirizzo base della prima Working Zone (WZ 0).\newline
+	Le successive volte viene richiesto l'indirizzo base della prossima Working Zone e viene letto dalla memoria l'indirizzo base della Working Zone richiesta precedentemente. Questo verrà confrontato direttamente con l'indirizzo da codificare per stabilirne l'eventuale appartenenza. In caso positivo, viene salvato l'offset in un registro e il sistema passa allo stato \texttt{WRITE\_BACK}.\newline
+	Si torna in questo stato finché non si trova la Working Zone di appartenenza dell'indirizzo da codificare o fino a quando non si sono esaurite le Working Zone da controllare. 
+	
+	\item \texttt{WRITE\_BACK}\newline
+	Stato in cui l'indirizzo codificato viene scritto nell'indirizzo 9 della memoria e si passa allo stato \texttt{DONE}.
+		
+	\item \texttt{DONE}\newline
+	Stato finale in cui si pone il segnale \lstinline[columns=fixed]{o_done='1'}.\newline
+	Si resta in questo stato fino a quando non si riceve \lstinline[columns=fixed]{i_start='0'} per poter poi abbassare il segnale \lstinline[columns=fixed]{o_done} e tornare nello stato \texttt{IDLE}.
+\end{itemize}
+
+\begin{figure}[!htb]
+	%\setlength\abovecaptionskip{-5pt}
+	
+	\input{figures/fsm_1}
+	\caption{rappresentazione della macchina a stati.}	
+	\label{fig:fsm_1}
+\end{figure}
